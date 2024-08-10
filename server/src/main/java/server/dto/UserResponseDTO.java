@@ -6,7 +6,7 @@ import server.entity.User;
 import java.util.Set;
 import java.util.UUID;
 
-public record UserResponseDTO(String name, String email, String roles, String phone, UUID id) implements HttpStatusCode {
+public record UserResponseDTO(String name, String email, String roles, String phone, UUID id) {
     public static UserResponseDTO fromUser(User user) {
 
         String role = user.getRoles().toString();
