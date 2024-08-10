@@ -1,0 +1,135 @@
+Index: server/src/main/java/server/controller/UserController.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package server.controller;\n\n\nimport org.springframework.beans.factory.annotation.Autowired;\nimport org.springframework.http.ResponseEntity;\nimport org.springframework.web.bind.annotation.*;\nimport server.dto.UserResponseDTO;\nimport server.dto.UserSignUpDTO;\nimport server.entity.User;\nimport server.service.UserService;\n\n@RestController\n@RequestMapping(\"/api/users/\")\npublic class UserController {\n\n    private final UserService userService;\n\n    @Autowired\n    public UserController(UserService userService) {\n        this.userService = userService;\n    }\n    @PostMapping(\"signup\")\n    public ResponseEntity<UserResponseDTO> signup(UserSignUpDTO userSignUpDTO) {\n        User user = UserSignUpDTO.from(userSignUpDTO);\n        return userService.createUser(user);\n    }\n\n}\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/server/src/main/java/server/controller/UserController.java b/server/src/main/java/server/controller/UserController.java
+--- a/server/src/main/java/server/controller/UserController.java	(revision 326e80cc1f69ffd7291dd6adf3289285e9d50575)
++++ b/server/src/main/java/server/controller/UserController.java	(date 1723288964805)
+@@ -4,10 +4,14 @@
+ import org.springframework.beans.factory.annotation.Autowired;
+ import org.springframework.http.ResponseEntity;
+ import org.springframework.web.bind.annotation.*;
++import server.dto.UserLoginDTO;
+ import server.dto.UserResponseDTO;
+ import server.dto.UserSignUpDTO;
+ import server.entity.User;
++import server.exception.UserNotFoundException;
+ import server.service.UserService;
++import java.util.Optional;
++import java.util.UUID;
+ 
+ @RestController
+ @RequestMapping("/api/users/")
+@@ -24,5 +28,17 @@
+         User user = UserSignUpDTO.from(userSignUpDTO);
+         return userService.createUser(user);
+     }
++    @PostMapping("login")
++    public ResponseEntity<UserResponseDTO> login(UserLoginDTO userLoginDTO) {
++        Optional<User> user = UserLoginDTO.from(userLoginDTO);
++        if(user.isEmpty()) {
++            throw new UserNotFoundException("User not found");
++        }
++        return userService.login(user.get());
++    }
+ 
++    @GetMapping("{id}")
++    public ResponseEntity<UserResponseDTO> getDetails(@PathVariable UUID userId) {
++        return userService.getUserDetails(userId);
++    }
+ }
+Index: server/src/main/java/server/service/UserService.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package server.service;\n\n\nimport at.favre.lib.crypto.bcrypt.BCrypt;\nimport org.springframework.beans.factory.annotation.Autowired;\nimport org.springframework.http.ResponseEntity;\nimport org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;\nimport org.springframework.stereotype.Service;\nimport server.dto.UserResponseDTO;\nimport server.entity.User;\nimport server.repositories.UserRepository;\n\nimport static org.springframework.http.HttpStatus.OK;\n\n@Service\npublic class UserService {\n    private BCryptPasswordEncoder bCryptPasswordEncoder;\n    @Autowired\n    private final UserRepository userRepository;\n    public UserService(UserRepository userRepository) {\n        this.bCryptPasswordEncoder = new BCryptPasswordEncoder();\n        this.userRepository = userRepository;\n    }\n    public ResponseEntity<UserResponseDTO> createUser(User user) {\n        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));\n        userRepository.save(user);\n        return new ResponseEntity<>(UserResponseDTO.fromUser(user), OK);\n    }\n}\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/server/src/main/java/server/service/UserService.java b/server/src/main/java/server/service/UserService.java
+--- a/server/src/main/java/server/service/UserService.java	(revision 326e80cc1f69ffd7291dd6adf3289285e9d50575)
++++ b/server/src/main/java/server/service/UserService.java	(date 1723289300229)
+@@ -4,17 +4,23 @@
+ import at.favre.lib.crypto.bcrypt.BCrypt;
+ import org.springframework.beans.factory.annotation.Autowired;
+ import org.springframework.http.ResponseEntity;
++import org.springframework.security.authentication.BadCredentialsException;
++import org.springframework.security.core.userdetails.UsernameNotFoundException;
+ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+ import org.springframework.stereotype.Service;
++import server.dto.UserLoginDTO;
+ import server.dto.UserResponseDTO;
+ import server.entity.User;
+ import server.repositories.UserRepository;
+ 
++import java.util.Optional;
++import java.util.UUID;
++
+ import static org.springframework.http.HttpStatus.OK;
+ 
+ @Service
+ public class UserService {
+-    private BCryptPasswordEncoder bCryptPasswordEncoder;
++    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+     @Autowired
+     private final UserRepository userRepository;
+     public UserService(UserRepository userRepository) {
+@@ -26,4 +32,20 @@
+         userRepository.save(user);
+         return new ResponseEntity<>(UserResponseDTO.fromUser(user), OK);
+     }
++
++    public ResponseEntity<UserResponseDTO> login(User incomingUser) {
++
++        User user = userRepository.findByEmail(incomingUser.getEmail());
++
++        if (!bCryptPasswordEncoder.matches(incomingUser.getPassword(), user.getPassword())) {
++            throw new BadCredentialsException("Bad credentials");
++        }
++        return new ResponseEntity<>(UserResponseDTO.fromUser(user), OK);
++    }
++    public ResponseEntity<UserResponseDTO> getUserDetails(UUID id) {
++        if(userRepository.findById(id).isEmpty()) {
++            throw new UsernameNotFoundException("User not found");
++        }
++        return new ResponseEntity<>(UserResponseDTO.fromUser(userRepository.findById(id).get()), OK);
++    }
+ }
+Index: server/src/main/java/server/exception/UserNotFoundException.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package server.exception;\n\npublic class UserNotFoundException {\n}\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/server/src/main/java/server/exception/UserNotFoundException.java b/server/src/main/java/server/exception/UserNotFoundException.java
+--- a/server/src/main/java/server/exception/UserNotFoundException.java	(revision 326e80cc1f69ffd7291dd6adf3289285e9d50575)
++++ b/server/src/main/java/server/exception/UserNotFoundException.java	(date 1723289096286)
+@@ -1,4 +1,7 @@
+ package server.exception;
+ 
+-public class UserNotFoundException {
++public class UserNotFoundException extends RuntimeException{
++    public UserNotFoundException(String message) {
++        super(message);
++    }
+ }
+Index: server/src/main/java/server/dto/UserResponseDTO.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package server.dto;\n\nimport org.springframework.http.HttpStatusCode;\nimport server.entity.User;\n\nimport java.util.Set;\nimport java.util.UUID;\n\npublic record UserResponseDTO(String name, String email, String roles, String phone, UUID id) implements HttpStatusCode {\n    public static UserResponseDTO fromUser(User user) {\n\n        String role = user.getRoles().toString();\n        return new UserResponseDTO(\n                user.getUsername(), user.getEmail(), role, user.getPhoneNumber(), user.getId());\n    }\n}\n
+===================================================================
+diff --git a/server/src/main/java/server/dto/UserResponseDTO.java b/server/src/main/java/server/dto/UserResponseDTO.java
+--- a/server/src/main/java/server/dto/UserResponseDTO.java	(revision 326e80cc1f69ffd7291dd6adf3289285e9d50575)
++++ b/server/src/main/java/server/dto/UserResponseDTO.java	(date 1723287971202)
+@@ -6,7 +6,7 @@
+ import java.util.Set;
+ import java.util.UUID;
+ 
+-public record UserResponseDTO(String name, String email, String roles, String phone, UUID id) implements HttpStatusCode {
++public record UserResponseDTO(String name, String email, String roles, String phone, UUID id){
+     public static UserResponseDTO fromUser(User user) {
+ 
+         String role = user.getRoles().toString();
