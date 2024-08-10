@@ -8,11 +8,11 @@
 		<version>3.3.2</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>TitanHackx-2024.codeWarriors</groupId>
-	<artifactId>BookYourChef</artifactId>
+	<groupId>com.example</groupId>
+	<artifactId>backend</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>BookYourChef</name>
-	<description>In today&apos;s fast-paced world, many people prefer home-cooked meals over eating outside food due to health, taste, and dietary preferences. However, busy schedules and lack of culinary skills often make it difficult for individuals and families to prepare meals at home. To address this issue, we propose a solution where a professional chef is arranged to prepare meals in the customer&apos;s own kitchen.  This service would cater to the needs of individuals who value home-cooked meals but lack the time or expertise to prepare them. The chef would work with the customer to understand their dietary preferences, and nutritional requirements, and create a personalized menu. This approach ensures that customers can enjoy healthy, delicious, and customized meals in the comfort of their homes without the hassle of cooking. The service aims to provide convenience, quality, and a home-like dining experience tailored to individual tastes.</description>
+	<name>backend</name>
+	<description>Demo project for Spring Boot</description>
 	<url/>
 	<licenses>
 		<license/>
@@ -28,7 +28,6 @@
 	</scm>
 	<properties>
 		<java.version>17</java.version>
-		<spring-cloud.version>2023.0.3</spring-cloud.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -42,10 +41,6 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
 		</dependency>
 
 		<dependency>
@@ -75,17 +70,6 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
-	<dependencyManagement>
-		<dependencies>
-			<dependency>
-				<groupId>org.springframework.cloud</groupId>
-				<artifactId>spring-cloud-dependencies</artifactId>
-				<version>${spring-cloud.version}</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
-		</dependencies>
-	</dependencyManagement>
 
 	<build>
 		<plugins>

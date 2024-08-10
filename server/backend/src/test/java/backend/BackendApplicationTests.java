@@ -1,10 +1,10 @@
-package TitanHackx_2024.codeWarriors.BookYourChef;
+package backend;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class BookYourChefApplicationTests {
+class BackendApplicationTests {
 
 	@Test
 	void contextLoads() {

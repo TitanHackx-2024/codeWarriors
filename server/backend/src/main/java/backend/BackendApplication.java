@@ -1,13 +1,13 @@
-package TitanHackx_2024.codeWarriors.BookYourChef;
+package backend;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class BookYourChefApplication {
+public class BackendApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(BookYourChefApplication.class, args);
+		SpringApplication.run(BackendApplication.class, args);
 	}
 
 }
