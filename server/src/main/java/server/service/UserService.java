@@ -1,14 +1,15 @@
 package server.service;
 
-import at.favre.lib.crypto.bcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import server.dto.UserResponseDTO;
 import server.entity.User;
+import server.exception.UserNotFoundException;
 import server.repositories.UserRepository;
-
+import java.util.Optional;
+import java.util.UUID;
 import static org.springframework.http.HttpStatus.OK;
 
 @Service
@@ -24,6 +25,22 @@ public class UserService {
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         userRepository.save(user);
         return new ResponseEntity<>(UserResponseDTO.fromUser(user), OK);
+    }
+
+    public ResponseEntity<UserResponseDTO> loginUser(User user) {
+        Optional<User> userOptional = Optional.ofNullable(userRepository.findByEmail(user.getEmail()));
+        if (userOptional.isEmpty()) {
+            throw new UserNotFoundException(user.getEmail());
+        }
+        return new ResponseEntity<>(UserResponseDTO.fromUser(user), OK);
+    }
+
+    public ResponseEntity<UserResponseDTO> getDetails(UUID id) {
+        Optional<User> userOptional = userRepository.findById(id);
+        if(userOptional.isEmpty()) {
+            throw new UserNotFoundException("User not found");
+        }
+        return new ResponseEntity<>(UserResponseDTO.fromUser(userOptional.get()), OK);
     }
 
 }
