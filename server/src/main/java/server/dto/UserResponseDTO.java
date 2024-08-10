@@ -1,9 +1,6 @@
 package server.dto;
 
-import org.springframework.http.HttpStatusCode;
 import server.entity.User;
-
-import java.util.Set;
 import java.util.UUID;
 
 public record UserResponseDTO(String name, String email, String roles, String phone, UUID id) {
