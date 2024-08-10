@@ -24,7 +24,7 @@ public class UserService {
     public ResponseEntity<UserResponseDTO> createUser(User user) {
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         userRepository.save(user);
-        return new ResponseEntity<>(UserResponseDTO.fromUser(user), OK);
+        return ResponseEntity.ok(UserResponseDTO.fromUser(user));
     }
 
     public ResponseEntity<UserResponseDTO> loginUser(User user) {
@@ -42,5 +42,7 @@ public class UserService {
         }
         return new ResponseEntity<>(UserResponseDTO.fromUser(userOptional.get()), OK);
     }
-
+    public ResponseEntity<User> updateUserProfile(User user) {
+        return new ResponseEntity<>(userRepository.save(user), OK);
+    }
 }
