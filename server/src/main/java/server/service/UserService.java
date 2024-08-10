@@ -1,6 +1,5 @@
 package server.service;
 
-
 import at.favre.lib.crypto.bcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -26,4 +25,5 @@ public class UserService {
         userRepository.save(user);
         return new ResponseEntity<>(UserResponseDTO.fromUser(user), OK);
     }
+
 }
