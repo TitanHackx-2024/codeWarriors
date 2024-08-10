@@ -7,7 +7,7 @@ import server.entity.User;
 
 import java.util.Locale;
 
-@Getter
+
 public record UserSignUpDTO(String name, String password, String email, String phoneNumber) {
     
     public static User from(UserSignUpDTO incomingUser) {
