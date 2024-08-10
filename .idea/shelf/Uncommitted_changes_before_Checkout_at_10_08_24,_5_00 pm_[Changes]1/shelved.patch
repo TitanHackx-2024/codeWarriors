@@ -1,0 +1,27 @@
+Index: server/src/main/java/server/dto/UserLoginDTO.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/server/src/main/java/server/dto/UserLoginDTO.java b/server/src/main/java/server/dto/UserLoginDTO.java
+new file mode 100644
+--- /dev/null	(date 1723288203243)
++++ b/server/src/main/java/server/dto/UserLoginDTO.java	(date 1723288203243)
+@@ -0,0 +1,17 @@
++package server.dto;
++
++import server.entity.Role;
++import server.entity.User;
++
++import java.util.Optional;
++
++public record UserLoginDTO(String username, String password) {
++    public static Optional<User> from(UserLoginDTO incomingUser) {
++        User user = new User();
++        user.setUsername(incomingUser.username);
++        user.setPassword(incomingUser.password);
++        user.setIsActive(true);
++        user.setRoles(Role.USER);
++        return Optional.of(user);
++    }
++}
