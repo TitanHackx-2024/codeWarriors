@@ -17,11 +17,17 @@
                   <input type="password" class="form-control" id="password" placeholder="Enter your password" required>
                 </div>
                 <div class="mb-3">
-                  <button type="submit" class="btn btn-primary w-100">Login</button>
+                  <button (click)="login()" type="submit" class="btn btn-primary w-100">Login</button>
                 </div>
                 <div class="text-center">
                   <a href="#">Forgot password?</a>
+                  <!-- <a href="#">&nbsp; &nbsp; Sign up</a> -->
                 </div>
+                <div class="text-center">
+                    <!-- <a router-link="/signup" class="mr-5 hover:text-white">sign up</a> -->
+                    <!-- <span [routerLink]="['/home']">Home</span> -->
+                    <a href="/signup"> Sign up</a>
+                  </div>
               </form>
             </div>
           </div>
@@ -32,3 +38,4 @@
     <!-- Optional JavaScript; choose one of the two! -->
     <!-- Option 1: Bootstrap Bundle with Popper -->
   </body>
+  
