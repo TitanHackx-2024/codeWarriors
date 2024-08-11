@@ -3,6 +3,8 @@ package server.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.time.Instant;
 import java.util.Date;
 import java.util.List;
 
@@ -12,9 +14,13 @@ import java.util.List;
 public class Booking extends BaseModel{
     @ManyToOne
     private User user;
+
+    @ManyToOne
+    private Chef chef;
+
     @Enumerated(EnumType.ORDINAL)
     private BookingStatus bookingStatus;
-    private Date bookedAt;
+    private Instant bookedAt;
     // 1 : M
     // M : 1  , cancelled booking will also have foodDish
     @ManyToMany
