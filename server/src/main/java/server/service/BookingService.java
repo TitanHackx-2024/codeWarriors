@@ -32,8 +32,8 @@ public class BookingService {
     }
 
     public Booking bookChef(
-            UUID chefSlot,
-            List<UUID> chefSkills,
+            Instant chefSlot,
+            //List<UUID> chefSkills,
             UUID chefId,
             UUID userId
     ){
