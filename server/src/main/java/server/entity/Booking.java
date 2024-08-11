@@ -26,10 +26,8 @@ public class Booking extends BaseModel{
     // M : 1  , cancelled booking will also have foodDish
     @ManyToMany
     private List<FoodDish> foodDishList;
-    // 1 : 1
-    // M : 1
-    @ManyToOne
-    private Skills chefSlot;
+
+    private Instant chefSlot;
     private int amount;
     // 1 : M
     // 1 : 1
