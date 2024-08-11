@@ -1,6 +1,7 @@
 package server.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import server.dto.BookChefRequestDTO;
@@ -22,8 +23,7 @@ public class BookingController {
         this.bookingService = bookingService;
     }
 
-
-
+    @PostMapping("bookchef")
     public BookChefResponseDTO bookChef(BookChefRequestDTO request){
         BookChefResponseDTO response = new BookChefResponseDTO();
         try {
