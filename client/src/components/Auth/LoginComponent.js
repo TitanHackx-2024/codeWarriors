@@ -27,26 +27,19 @@ function Copyright(props) {
   );
 }
 
-// TODO remove, this demo shouldn't need to reset the theme.
-
 const defaultTheme = createTheme();
 
-export default function SignInSide() {
+export default function LoginComponent({ onLogin }) {
   const navigate = useNavigate();
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
     const formData = {
       email: data.get('email'),
       password: data.get('password'),
-      // email:"khush2222@gmail.com",
-      // password:"Khush123"
-    }
-    console.log("FORMDATA ", formData)
+    };
+
     try {
       const response = await fetch('http://localhost:9000/api/users/login', {
         method: 'POST',
@@ -55,15 +48,20 @@ export default function SignInSide() {
         },
         body: JSON.stringify(formData),
       });
-  
+
       if (response.ok) {
         const result = await response.json();
-        console.log('log-in successful:', result);
-        navigate('/home');
-        // Redirect to login page or show a success message
+        console.log('Log-in successful:', result);
+
+        // Update the login state in App component
+        // onLogin();
+        onLogin(result.id);
+
+        // Pass userId to /booking
+        navigate('/', { state: { userId: result.id } });
       } else {
         const errorResult = await response.json();
-        console.error('login-failed', errorResult.message);
+        console.error('Login failed:', errorResult.message);
         // Show error message to the user
       }
     } catch (error) {

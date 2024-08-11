@@ -4,51 +4,38 @@ import { useParams, Link } from 'react-router-dom';
 import Slider from 'react-slick';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
-import { chefs } from '../common/utils.js';
 
 function ChefDetailComponent() {
   const { id } = useParams();
-  const [chef, setChef] = useState(null);
+  const [chefs, setChefs] = useState(null);
+  const [selectedChef, setSelectedChef] = useState(null);
+  const [currentSlide, setCurrentSlide] = useState(0);  // Define currentSlide state
   const sliderRef = useRef(null);
 
-  // useEffect(() => {
-  //   const fetchChef = () => {
-  //     const selectedChef = chefs.find((chef) => chef.id === parseInt(id, 10));
-  //     setChef(selectedChef);
-  //   };
-
-  //   fetchChef();
-  // }, [id]);
+  const dishes = [
+    { id: 1, name: 'California Roll', image: 'https://via.placeholder.com/750' },
+    { id: 2, name: 'Miso Soup', image: 'https://via.placeholder.com/750' }
+  ];
 
   useEffect(() => {
-    const fetchChef = async () => {
+    const fetchChefs = async () => {
       try {
-        const response = await fetch(`http://localhost:9000/api/chefs/${id}`);  // Replace with your API endpoint
+        const response = await fetch('http://localhost:9000/api/chefs/getAllChefs'); // API endpoint for all chefs
         if (!response.ok) {
-          throw new Error('Failed to fetch chef data');
+          throw new Error('Failed to fetch chefs data');
         }
         const data = await response.json();
-        setChef(data);  // Set the fetched data to the chef state
+        setChefs(data);
+        const selectedChef = data.find((chef) => chef.id === id);
+        setSelectedChef(selectedChef);
       } catch (error) {
-        console.error('Error fetching chef data:', error);
+        console.error('Error fetching chefs data:', error);
       }
     };
 
-    fetchChef();
-  }, [id]);  // Dependency array ensures this runs when the ID changes
+    fetchChefs();
+  }, [id]);
 
-
-  // Settings for the carousel
-  const carouselSettings = {
-    dots: true,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    arrows: false, // Disable default arrows
-  };
-
-  // Auto-scroll carousel every 3 seconds
   useEffect(() => {
     const intervalId = setInterval(() => {
       if (sliderRef.current) {
@@ -59,11 +46,17 @@ function ChefDetailComponent() {
     return () => clearInterval(intervalId);
   }, []);
 
-  // Manually control carousel
-  const [currentSlide, setCurrentSlide] = useState(0);
+  const carouselSettings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    arrows: false,
+  };
 
   const handleBeforeChange = (oldIndex, newIndex) => {
-    setCurrentSlide(newIndex);
+    setCurrentSlide(newIndex);  // Update the current slide index
   };
 
   const handleNext = () => {
@@ -78,26 +71,24 @@ function ChefDetailComponent() {
     }
   };
 
-  console.log(chef);
-
   return (
     <Container className="p-6 bg-gray-100 min-h-screen">
-      {chef ? (
+      {selectedChef ? (
         <Paper elevation={3} className="p-6">
           <Typography variant="h5" gutterBottom className="mb-4 text-gray-700">
-            {chef.name}
+            {selectedChef.name}
           </Typography>
           <Typography variant="body1" className="mb-4 text-gray-600">
-            Skills: {chef.skills}
+            Skills: {selectedChef.skills}
           </Typography>
           <Typography variant="body1" className="mb-4 text-gray-600">
-            Availability: {chef.availability}
+            Availability: {selectedChef.availability}
           </Typography>
           <Typography variant="body1" className="mb-4 text-gray-600">
-            Rating: {chef.rating}
+            Rating: {selectedChef.rating}
           </Typography>
           <Typography variant="body1" className="mb-4 text-gray-600">
-            Bio: {chef.bio}
+            Bio: {selectedChef.bio || ''}
           </Typography>
           <Typography variant="h6" className="mb-4 text-gray-700">
             Dishes Prepared
@@ -108,7 +99,7 @@ function ChefDetailComponent() {
               ref={sliderRef}
               beforeChange={handleBeforeChange}
             > 
-              {chef?.dishes.map((dish) => (
+              {dishes.map((dish) => (
                 <div key={dish.id}>
                   <Card>
                     <CardMedia
@@ -143,8 +134,8 @@ function ChefDetailComponent() {
             <Button
               component={Link}
               to={{
-                pathname: `/booking/${chef.id}`,
-                state: { chef },
+                pathname: `/booking/${selectedChef.id}`,
+                state: { chef: selectedChef },
               }}
               variant="contained"
               color="primary"

@@ -36,6 +36,7 @@ const defaultTheme = createTheme();
 export default function SignUp() {
   const [userType, setUserType] = React.useState('user');
   const navigate = useNavigate();
+  
   const handleUserTypeChange = (event) => {
     setUserType(event.target.value);
   };
@@ -44,26 +45,14 @@ export default function SignUp() {
     event.preventDefault();
     
     const data = new FormData(event.currentTarget);
-    console.log({
-      userType: userType,
-      firstName: data.get('firstName'),
-      lastName: data.get('lastName'),
-      email: data.get('email'),
-      password: data.get('password'),
-    });
     const formData = {
-      role: userType.toUpperCase(),
+      role: userType.toUpperCase(), // Set role based on userType
       name: data.get('firstName'),
       email: data.get('email'),
       password: data.get('password'),
-      phone:"9876543210"
-      // "name":"khush",
-    // "email":"khush@gmail.com",
-    //  "password":"Khush123",
-    //  "phone":"9650624299",
-    // "role":"USER"
-    }
-    console.log("FORMDATA ", formData)
+      phone: "9876543210"
+    };
+    
     try {
       const response = await fetch('http://localhost:9000/api/users/signup', {
         method: 'POST',
@@ -88,8 +77,6 @@ export default function SignUp() {
       // Handle network or server error
     }
   };
-
-
 
   return (
     <ThemeProvider theme={defaultTheme}>
