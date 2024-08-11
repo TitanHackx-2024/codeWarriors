@@ -14,8 +14,6 @@ import server.service.UserService;
 import java.util.Optional;
 import java.util.UUID;
 
-import static org.springframework.http.HttpStatus.OK;
-
 @RestController
 @RequestMapping("/api/users/")
 public class UserController {
@@ -25,6 +23,7 @@ public class UserController {
     public UserController(UserService userService) {
         this.userService = userService;
     }
+
     @PostMapping("signup")
     public ResponseEntity<UserResponseDTO> signup(@RequestBody  UserSignUpDTO userSignUpDTO) {
         User user = UserSignUpDTO.from(userSignUpDTO);
@@ -39,16 +38,27 @@ public class UserController {
         return userService.loginUser(user.get());
     }
 
-    @GetMapping("{id}")
-    public ResponseEntity<UserResponseDTO> getDetails(@RequestParam UUID userId) {
+    @GetMapping("/{id}")
+    public ResponseEntity<UserResponseDTO> getDetails(@PathVariable("id") UUID userId) {
         return userService.getDetails(userId);
     }
     @PutMapping("/{id}")
-    public ResponseEntity<User> updateUserProfile(@PathVariable Long id, @RequestBody UserUpdateDetails userUpdateDetails) {
+    public ResponseEntity<UserResponseDTO> updateUserProfile(@PathVariable UUID id, @RequestBody UserUpdateDetails userUpdateDetails) {
         Optional<User> user = UserUpdateDetails.from(userUpdateDetails);
         if(user.isEmpty()) {
             throw new UserNotFoundException("User not found");
         }
+        user.get().setId(id);
         return userService.updateUserProfile(user.get());
     }
+
+
+//    @GetMapping("bookings/{id}")
+//    public ResponseEntity<UserResponseDTO> getRecentBooking(@PathVariable UUID userId) {
+
+//    }
+//    @GetMapping("transactions/{id}")
+//    public ResponseEntity<UserResponseDTO> getRecentBooking(@PathVariable UUID userId) {
+//
+//    }
 }

@@ -6,6 +6,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import server.dto.UserResponseDTO;
 import server.entity.User;
+import server.exception.UnAuthorizedAccess;
 import server.exception.UserNotFoundException;
 import server.repositories.UserRepository;
 import java.util.Optional;
@@ -27,10 +28,14 @@ public class UserService {
         return ResponseEntity.ok(UserResponseDTO.fromUser(user));
     }
 
-    public ResponseEntity<UserResponseDTO> loginUser(User user) {
-        Optional<User> userOptional = Optional.ofNullable(userRepository.findByEmail(user.getEmail()));
+    public ResponseEntity<UserResponseDTO> loginUser(User incomingUser) {
+        Optional<User> userOptional = userRepository.findByEmail(incomingUser.getEmail());
         if (userOptional.isEmpty()) {
-            throw new UserNotFoundException(user.getEmail());
+            throw new UserNotFoundException(incomingUser.getEmail());
+        }
+        User user = userOptional.get();
+        if(!bCryptPasswordEncoder.matches(incomingUser.getPassword(), user.getPassword())) {
+            throw new UnAuthorizedAccess("Password is wrong");
         }
         return new ResponseEntity<>(UserResponseDTO.fromUser(user), OK);
     }
@@ -42,7 +47,15 @@ public class UserService {
         }
         return new ResponseEntity<>(UserResponseDTO.fromUser(userOptional.get()), OK);
     }
-    public ResponseEntity<User> updateUserProfile(User user) {
-        return new ResponseEntity<>(userRepository.save(user), OK);
+    public ResponseEntity<UserResponseDTO> updateUserProfile(User user) {
+        User updatedUser = userRepository.findById(user.getId()).get();
+        updatedUser.setEmail(user.getEmail());
+        updatedUser.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+        updatedUser.setPhoneNumber(updatedUser.getPhoneNumber());
+        userRepository.save(updatedUser);
+        return new ResponseEntity<>(UserResponseDTO.fromUser(updatedUser), OK);
     }
+
+
+//    public ResponseEntity<List<BookingDTO>> booking()
 }

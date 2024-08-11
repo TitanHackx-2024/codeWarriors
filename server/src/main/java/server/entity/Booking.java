@@ -3,7 +3,6 @@ package server.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-
 import java.util.Date;
 import java.util.List;
 
@@ -11,8 +10,8 @@ import java.util.List;
 @Setter
 @Entity(name = "t_booking")
 public class Booking extends BaseModel{
-
-    //private User user;
+    @ManyToOne
+    private User user;
     @Enumerated(EnumType.ORDINAL)
     private BookingStatus bookingStatus;
     private Date bookedAt;
