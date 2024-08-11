@@ -8,7 +8,7 @@ import java.util.UUID;
 @Getter
 @Setter
 public class BookChefRequestDTO {
-    private List<UUID> chefSlot;
+    private UUID chefSlot;
     private List<UUID> chefSkills;
     private UUID chefId;
     private UUID userId;
