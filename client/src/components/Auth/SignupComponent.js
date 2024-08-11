@@ -16,6 +16,7 @@ import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
+import { useNavigate } from 'react-router-dom';
 
 function Copyright(props) {
   return (
@@ -34,13 +35,14 @@ const defaultTheme = createTheme();
 
 export default function SignUp() {
   const [userType, setUserType] = React.useState('user');
-
+  const navigate = useNavigate();
   const handleUserTypeChange = (event) => {
     setUserType(event.target.value);
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
+    
     const data = new FormData(event.currentTarget);
     console.log({
       userType: userType,
@@ -49,7 +51,45 @@ export default function SignUp() {
       email: data.get('email'),
       password: data.get('password'),
     });
+    const formData = {
+      role: userType.toUpperCase(),
+      name: data.get('firstName'),
+      email: data.get('email'),
+      password: data.get('password'),
+      phone:"9876543210"
+      // "name":"khush",
+    // "email":"khush@gmail.com",
+    //  "password":"Khush123",
+    //  "phone":"9650624299",
+    // "role":"USER"
+    }
+    console.log("FORMDATA ", formData)
+    try {
+      const response = await fetch('http://localhost:9000/api/users/signup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+  
+      if (response.ok) {
+        const result = await response.json();
+        console.log('Sign-up successful:', result);
+        navigate('/login');
+        // Redirect to login page or show a success message
+      } else {
+        const errorResult = await response.json();
+        console.error('Sign-up failed:', errorResult.message);
+        // Show error message to the user
+      }
+    } catch (error) {
+      console.error('An error occurred:', error);
+      // Handle network or server error
+    }
   };
+
+
 
   return (
     <ThemeProvider theme={defaultTheme}>

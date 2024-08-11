@@ -24,6 +24,7 @@ function App() {
     <Router>
       <Layout isLoggedIn={isLoggedIn} onLogout={handleLogout}>
         <Routes>
+          {/* <Route path="/" element={<LoginComponent />} /> */}
           <Route path="/" element={<DashboardComponent />} />
           <Route path="/login" element={<LoginComponent />} />
           <Route path="/signup" element={<SignupComponent />} />

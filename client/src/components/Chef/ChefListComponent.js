@@ -1,9 +1,23 @@
-import React from 'react';
+// import React from 'react';
 import { Card, CardContent, CardActions, Button, Typography, Container, Grid } from '@mui/material';
 import { Link } from 'react-router-dom';
-import { chefs } from '../common/utils';
+// import { chefs } from '../common/utils';
+import React, { useEffect, useState } from 'react';
 
 function ChefListComponent() {
+  const [chefs, setChefs] = useState([]);
+  
+
+  // Fetch data from API
+  useEffect(() => {
+    fetch('http://localhost:9000/api/chefs/getAllChefs') // Replace with your API URL
+      .then((response) => response.json())
+      .then((data) => {
+        setChefs(data); // Update state with the fetched data
+      })
+      .catch((error) => console.error('Error fetching chef data:', error));
+  }, []); // Empty dependency array ensures this runs once when the component mounts
+
 
   return (
     <Container className="p-6 bg-gray-100 min-h-screen">

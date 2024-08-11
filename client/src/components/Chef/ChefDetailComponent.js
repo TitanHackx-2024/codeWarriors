@@ -11,14 +11,32 @@ function ChefDetailComponent() {
   const [chef, setChef] = useState(null);
   const sliderRef = useRef(null);
 
+  // useEffect(() => {
+  //   const fetchChef = () => {
+  //     const selectedChef = chefs.find((chef) => chef.id === parseInt(id, 10));
+  //     setChef(selectedChef);
+  //   };
+
+  //   fetchChef();
+  // }, [id]);
+
   useEffect(() => {
-    const fetchChef = () => {
-      const selectedChef = chefs.find((chef) => chef.id === parseInt(id, 10));
-      setChef(selectedChef);
+    const fetchChef = async () => {
+      try {
+        const response = await fetch(`http://localhost:9000/api/chefs/${id}`);  // Replace with your API endpoint
+        if (!response.ok) {
+          throw new Error('Failed to fetch chef data');
+        }
+        const data = await response.json();
+        setChef(data);  // Set the fetched data to the chef state
+      } catch (error) {
+        console.error('Error fetching chef data:', error);
+      }
     };
 
     fetchChef();
-  }, [id]);
+  }, [id]);  // Dependency array ensures this runs when the ID changes
+
 
   // Settings for the carousel
   const carouselSettings = {
@@ -89,8 +107,8 @@ function ChefDetailComponent() {
               {...carouselSettings}
               ref={sliderRef}
               beforeChange={handleBeforeChange}
-            >
-              {chef.dishes.map((dish) => (
+            > 
+              {chef?.dishes.map((dish) => (
                 <div key={dish.id}>
                   <Card>
                     <CardMedia
