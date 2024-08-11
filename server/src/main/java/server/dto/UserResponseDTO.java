@@ -10,4 +10,5 @@ public record UserResponseDTO(String name, String email, String roles, String ph
         return new UserResponseDTO(
                 user.getUsername(), user.getEmail(), role, user.getPhoneNumber(), user.getId());
     }
+
 }
