@@ -21,41 +21,36 @@ export const trendingChefs = [
 
 
 export const chefs = [
-    {
-      id: 1,
-      name: 'Chef John Doe',
-      skills: 'Italian Cuisine, Baking',
-      availability: 'Mon-Fri, 10am-6pm',
-      rating: '4.8/5',
-      dishes: [
-        { id: 1, name: 'Spaghetti Carbonara', image: 'https://via.placeholder.com/750' },
-        { id: 2, name: 'Tiramisu', image: 'https://via.placeholder.com/750' }
-      ],
-      bio: 'Experienced Italian chef with a passion for creating delicious pasta and pastries.',
-    },
-    {
-      id: 2,
-      name: 'Chef Jane Smith',
-      skills: 'French Cuisine, Pastry',
-      availability: 'Tue-Sat, 11am-7pm',
-      rating: '4.9/5',
-      dishes: [
-        { id: 1, name: 'Crème Brûlée', image: 'https://via.placeholder.com/750' },
-        { id: 2, name: 'Croissant', image: 'https://via.placeholder.com/750' }
-      ],
-      bio: 'Specializes in French pastries and classic French dishes with a modern twist.',
-    },
-    {
-      id: 3,
-      name: 'Chef Alice Johnson',
-      skills: 'Japanese Cuisine, Sushi',
-      availability: 'Wed-Sun, 12pm-8pm',
-      rating: '4.7/5',
-      dishes: [
-        { id: 1, name: 'California Roll', image: 'https://via.placeholder.com/750' },
-        { id: 2, name: 'Miso Soup', image: 'https://via.placeholder.com/750' }
-      ],
-      bio: 'Passionate about Japanese cuisine, with extensive experience in sushi and traditional Japanese dishes.',
-    },
-    // Add more static chefs as needed
-  ];
+  {
+      "id": "0c2d7c0e-54fd-4d6c-9b40-91412ea9601e",
+      "name": "chef5",
+      "skills": "indian",
+      "availability": "yes",
+      "phoneNumber": null,
+      "rating": 2.5
+  },
+  {
+      "id": "3d334ef5-275b-4c9e-a7eb-52d8aa16918e",
+      "name": "chef4",
+      "skills": "indian",
+      "availability": "yes",
+      "phoneNumber": null,
+      "rating": 2.5
+  },
+  {
+      "id": "ad4cbe53-ae8d-4841-8050-954460c52778",
+      "name": "chef2",
+      "skills": "indian",
+      "availability": "yes",
+      "phoneNumber": null,
+      "rating": 2.5
+  },
+  {
+      "id": "efbd0eb3-e424-41a3-b0c2-bedf4677b601",
+      "name": "chef3",
+      "skills": "indian",
+      "availability": "yes",
+      "phoneNumber": null,
+      "rating": 2.5
+  }
+]

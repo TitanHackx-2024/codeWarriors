@@ -4,12 +4,17 @@ import { useParams, Link } from 'react-router-dom';
 import Slider from 'react-slick';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
-import { chefs } from '../common/utils.js';
+// import { chefs } from '../common/utils.js';
 
 function ChefDetailComponent() {
   const { id } = useParams();
-  const [chef, setChef] = useState(null);
+  const [chefs, setChef] = useState(null);
   const sliderRef = useRef(null);
+
+  const dishes = [
+    { id: 1, name: 'California Roll', image: 'https://via.placeholder.com/750' },
+    { id: 2, name: 'Miso Soup', image: 'https://via.placeholder.com/750' }
+  ];
 
   // useEffect(() => {
   //   const fetchChef = () => {
@@ -78,26 +83,27 @@ function ChefDetailComponent() {
     }
   };
 
-  console.log(chef);
+  // console.log(chefs);
+  console.log(chefs.filter((chef) => chef.id === id));
 
   return (
     <Container className="p-6 bg-gray-100 min-h-screen">
-      {chef ? (
+      {chefs ? (
         <Paper elevation={3} className="p-6">
           <Typography variant="h5" gutterBottom className="mb-4 text-gray-700">
-            {chef.name}
+            {chefs.filter((chef) => chef.id === id)[0].name}
           </Typography>
           <Typography variant="body1" className="mb-4 text-gray-600">
-            Skills: {chef.skills}
+            Skills: {chefs.filter((chef) => chef.id === id)[0].skills}
           </Typography>
           <Typography variant="body1" className="mb-4 text-gray-600">
-            Availability: {chef.availability}
+            Availability: {chefs.filter((chef) => chef.id === id)[0].availability}
           </Typography>
           <Typography variant="body1" className="mb-4 text-gray-600">
-            Rating: {chef.rating}
+            Rating: {chefs.filter((chef) => chef.id === id)[0].rating}
           </Typography>
           <Typography variant="body1" className="mb-4 text-gray-600">
-            Bio: {chef.bio}
+            Bio: {chefs.filter((chef) => chef.id === id)[0].bio || ''}
           </Typography>
           <Typography variant="h6" className="mb-4 text-gray-700">
             Dishes Prepared
@@ -108,7 +114,7 @@ function ChefDetailComponent() {
               ref={sliderRef}
               beforeChange={handleBeforeChange}
             > 
-              {chef?.dishes.map((dish) => (
+              {dishes?.map((dish) => (
                 <div key={dish.id}>
                   <Card>
                     <CardMedia
@@ -143,8 +149,8 @@ function ChefDetailComponent() {
             <Button
               component={Link}
               to={{
-                pathname: `/booking/${chef.id}`,
-                state: { chef },
+                pathname: `/booking/${chefs.id}`,
+                state: { chefs },
               }}
               variant="contained"
               color="primary"
