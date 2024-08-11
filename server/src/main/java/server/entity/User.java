@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
 import java.util.Set;
 
 @Entity(name = "t_user")
@@ -17,6 +18,10 @@ public class User extends BaseModel{
     private String password;
     private Boolean isActive;
     private String phoneNumber;
+    @OneToMany(mappedBy = "user")
+    private List<Booking> bookings;
+    @OneToMany
+    private List<Payment> transactions;
     @Enumerated(EnumType.ORDINAL)
     private Role roles;
 }
