@@ -3,8 +3,8 @@ package server.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import server.dto.ChefListResponseDTO;
 import server.dto.ChefResponseDTO;
-import server.dto.UserResponseDTO;
 import server.entity.Chef;
 import server.repositories.ChefRepository;
 
@@ -20,8 +20,9 @@ public class ChefService {
     @Autowired
     private ChefRepository chefRepository;
 
-    public List<Chef> getAllChefs() {
-        return chefRepository.findAll();
+    public ResponseEntity<List<ChefResponseDTO>> getAllChefs() {
+        java.util.List<Chef> chefList = chefRepository.findAll();
+        return new ResponseEntity<List<ChefResponseDTO>>(ChefListResponseDTO.from(chefList), OK);
     }
 
     public ResponseEntity<ChefResponseDTO> getChefById(UUID id) {
@@ -29,8 +30,9 @@ public class ChefService {
         return new ResponseEntity<>(ChefResponseDTO.fromChef(chef.get()), OK);
     }
 
-    public Chef saveChef(Chef chef) {
-        return chefRepository.save(chef);
+    public ResponseEntity<ChefResponseDTO> saveChef(Chef chef) {
+        chefRepository.save(chef);
+        return ResponseEntity.ok(ChefResponseDTO.fromChef(chef));
     }
 
     public void deleteChef(UUID id) {
