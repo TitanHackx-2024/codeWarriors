@@ -12,11 +12,12 @@ import java.util.List;
 @Setter
 @Entity(name = "t_booking")
 public class Booking extends BaseModel{
+
     @ManyToOne
     private User user;
 
     @ManyToOne
-    private Chef chef;
+    private  Chef chef;
 
     @Enumerated(EnumType.ORDINAL)
     private BookingStatus bookingStatus;
