@@ -5,11 +5,7 @@ import lombok.*;
 
 import java.util.UUID;
 
-@Entity
-@Table(name="CHEF")
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+@Entity(name="chef")
 @Getter
 @Setter
 public class Chef extends BaseModel{

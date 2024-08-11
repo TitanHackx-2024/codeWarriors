@@ -5,7 +5,7 @@ import server.entity.Chef;
 
 import java.util.Optional;
 
-public record ChefResponseDTO(String name, String password, String email, String phoneNumber, double rating) {
+public record ChefResponseDTO(String name, String skills, String availability, String phoneNumber, double rating) {
 
     public static ChefResponseDTO fromChef(Chef chef) {
         ChefResponseDTO chefResponseDTO = new ChefResponseDTO(

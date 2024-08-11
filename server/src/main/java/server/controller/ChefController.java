@@ -3,6 +3,7 @@ package server.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import server.dto.ChefListResponseDTO;
 import server.dto.ChefResponseDTO;
 import server.entity.Chef;
 import server.exception.UserNotFoundException;
@@ -17,8 +18,8 @@ public class ChefController {
     @Autowired
     private ChefService chefService;
 
-    @GetMapping
-    public List<Chef> getAllChefs() {
+    @GetMapping("/getAllChefs")
+    public ResponseEntity<List<ChefResponseDTO>> getAllChefs() {
         return chefService.getAllChefs();
     }
 
