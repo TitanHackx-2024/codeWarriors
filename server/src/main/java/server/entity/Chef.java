@@ -6,7 +6,7 @@ import lombok.*;
 import java.util.UUID;
 
 @Entity
-@Table(name="CHEF")
+@Table(name="t_chef")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
